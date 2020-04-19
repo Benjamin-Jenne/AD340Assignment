@@ -12,5 +12,9 @@
         android:text="@string/hello_world"
         android:id="@+id/hello_world"/>
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/example020" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
