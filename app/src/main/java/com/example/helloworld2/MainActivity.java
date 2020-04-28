@@ -1,6 +1,7 @@
 package com.example.helloworld2;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,9 +10,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -37,13 +40,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_username;
 
     private TextView valid_dob;
+    private Boolean is_valid_dob = false;
+
+    public String date_message;
 
     public static final String input_name_string_var = MainActivity.input_name_string_var;
     public static final String input_username_string_var = MainActivity.input_username_string_var;
 
-    public static int month_var = MainActivity.month_var;
-    public static int year_var = MainActivity.year_var;
-    public static int day_var = MainActivity.day_var;
+    public static int birth_year = 2000;
+    public static int birth_month = 0;
+    public static int birth_day = 1;
 
     DatePickerDialog.OnDateSetListener date_listener;
 
@@ -66,23 +72,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         date_listener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month_var = month;
-                year_var = year;
-                day_var = dayOfMonth;
-                String m = Integer.toString(month+1);
-                String y = Integer.toString(year);
-                String d = Integer.toString(dayOfMonth);
-                String date = "month: " + m + ", year: " + y + ", day: " +d;
+            public void onDateSet(DatePicker view, int selected_birth_year, int selected_birth_month, int selected_birth_day) {
+                birth_year = selected_birth_year;
+                birth_month = selected_birth_month;
+                birth_day = selected_birth_day;
+                String y = Integer.toString(birth_year);
+                String m = Integer.toString(birth_month);
+                String d = Integer.toString(birth_day);
+                String date = "birth_year: " + y + ", birth_month: " + m + ", birth_day: " +d;
                 Log.i("Date set", date);
-                boolean valid = dobCheck(month, year, dayOfMonth);
-                if(valid == false){
-                    valid_dob.setText("\u2717 Must be 18 years or older");
+                is_valid_dob = dobCheck(birth_year, birth_month, birth_day);
+                if(is_valid_dob == false){
+                    valid_dob.setText(getResources().getString(R.string.invalid_dob));
                     valid_dob.setTextColor(Color.parseColor("#D8000C"));
+                    button_submit.setEnabled(false);
                 }
-                if(valid == true){
-                    valid_dob.setText("\u2713 18 years or older");
+                if(is_valid_dob == true){
+                    valid_dob.setText(getResources().getString(R.string.valid_dob));
                     valid_dob.setTextColor(Color.parseColor("#4F8A10"));
+                    button_submit.setEnabled(true);
                 }
             }
         };
@@ -91,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
         if(v.getId() == R.id.button_dob){
             Log.i("Date of birth button", "clicked");
-            DatePickerDialog dpd = new DatePickerDialog(this, date_listener, 2000, 1,1 );
+            DatePickerDialog dpd = new DatePickerDialog(this, date_listener, birth_year, birth_month,birth_day);
             dpd.show();
         }
         if(v.getId() == R.id.button_submit){
@@ -107,14 +115,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(submitActivity);
         }
     }
-    public boolean dobCheck(int birth_month, int birth_year, int birth_day){
+    public boolean dobCheck(int birth_year, int birth_month, int birth_day){
         Calendar c = Calendar.getInstance();
+        int current_year = c.get(Calendar.YEAR);
         int current_month = c.get(Calendar.MONTH);
         int current_day = c.get(Calendar.DAY_OF_MONTH);
-        int current_year = c.get(Calendar.YEAR);
         int min_year = current_year -18;
         int min_month = current_month;
-        int min_day = current_day;
         //The person is years younger than min year
         if(birth_year > min_year){
             return false;
@@ -131,5 +138,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
     }
-    
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("onrestpreinstancestate - is_valid_dob", Boolean.toString(savedInstanceState.getBoolean("is_valid_dob")));
+        if(savedInstanceState.containsKey("birth_year") &&
+                savedInstanceState.containsKey("birth_month") &&
+                    savedInstanceState.containsKey("birth_day")){
+            birth_year = savedInstanceState.getInt("birth_year");
+            birth_month = savedInstanceState.getInt("birth_month");
+            birth_day = savedInstanceState.getInt("birth_day");
+        }
+            if(savedInstanceState.getBoolean("is_valid_dob")== false){
+                valid_dob.setText(getResources().getString(R.string.invalid_dob));
+                valid_dob.setTextColor(Color.parseColor("#D8000C"));
+                button_submit.setEnabled(false);
+            }
+            if(savedInstanceState.getBoolean("is_valid_dob")== true){
+               valid_dob.setText(getResources().getString(R.string.valid_dob));
+               valid_dob.setTextColor(Color.parseColor("#4F8A10"));
+               button_submit.setEnabled(true);
+            }
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+            outState.putInt("birth_year", birth_year);
+            outState.putInt("birth_month", birth_month);
+            outState.putInt("birth_day", birth_day);
+            Log.i("onsaveinstancestate - is_valid_dob", Boolean.toString(is_valid_dob));
+            outState.putBoolean("is_valid_dob",is_valid_dob);
+    }
 }
