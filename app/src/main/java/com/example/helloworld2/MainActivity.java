@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String m = Integer.toString(birth_month);
                 String d = Integer.toString(birth_day);
                 String date = "birth_year: " + y + ", birth_month: " + m + ", birth_day: " +d;
-                Log.i("Date set", date);
                 is_valid_dob = dobCheck(birth_year, birth_month, birth_day);
                 if(is_valid_dob == false){
                     valid_dob.setText(getResources().getString(R.string.invalid_dob));
@@ -98,16 +97,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v){
         if(v.getId() == R.id.button_dob){
-            Log.i("Date of birth button", "clicked");
             DatePickerDialog dpd = new DatePickerDialog(this, date_listener, birth_year, birth_month,birth_day);
             dpd.show();
         }
         if(v.getId() == R.id.button_submit){
-            Log.i("Submit button", "clicked");
             String input_name_string = input_name.getText().toString();
             String input_email_string = input_email.getText().toString();
             String input_username_string = input_username.getText().toString();
-            Log.i("input_name_string:", input_name_string);
             //Create intent to go to submit activity class
             Intent submitActivity = new Intent(MainActivity.this, SubmitActivity.class);
             //Add the name to the intent
@@ -141,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
-        Log.i("onrestpreinstancestate - is_valid_dob", Boolean.toString(savedInstanceState.getBoolean("is_valid_dob")));
         if(savedInstanceState.containsKey("birth_year") &&
                 savedInstanceState.containsKey("birth_month") &&
                     savedInstanceState.containsKey("birth_day")){
@@ -166,7 +161,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             outState.putInt("birth_year", birth_year);
             outState.putInt("birth_month", birth_month);
             outState.putInt("birth_day", birth_day);
-            Log.i("onsaveinstancestate - is_valid_dob", Boolean.toString(is_valid_dob));
             outState.putBoolean("is_valid_dob",is_valid_dob);
+    }
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.i("Main Activity: ", "onRestart()");
+        input_name.getText().clear();
+        input_email.getText().clear();
+        input_username.getText().clear();
+        birth_year = 2000;
+        birth_month = 0;
+        birth_day = 1;
+        valid_dob.setText("");
     }
 }
