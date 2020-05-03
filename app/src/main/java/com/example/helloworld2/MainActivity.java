@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.PersistableBundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -28,7 +30,7 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.text.TextWatcher{
     //Referenced below video for help with DatePickerDialog listener
     //https://www.youtube.com/watch?v=E1LSY3g-CtY
 
@@ -38,14 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_name;
     private EditText input_email;
     private EditText input_username;
-
     private TextView valid_dob;
-    private Boolean is_valid_dob = false;
 
     public String date_message;
-
-    public static final String input_name_string_var = MainActivity.input_name_string_var;
-    public static final String input_username_string_var = MainActivity.input_username_string_var;
 
     public static int birth_year = 2000;
     public static int birth_month = 0;
@@ -67,8 +64,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         valid_dob = findViewById(R.id.valid_dob);
 
+        input_name.addTextChangedListener((TextWatcher) this);
+        input_email.addTextChangedListener((TextWatcher) this);
+        input_username.addTextChangedListener((TextWatcher) this);
         button_dob.setOnClickListener(this);
         button_submit.setOnClickListener(this);
+
+        button_submit.setEnabled(false);
 
         date_listener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -76,20 +78,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 birth_year = selected_birth_year;
                 birth_month = selected_birth_month;
                 birth_day = selected_birth_day;
-                String y = Integer.toString(birth_year);
-                String m = Integer.toString(birth_month);
-                String d = Integer.toString(birth_day);
-                String date = "birth_year: " + y + ", birth_month: " + m + ", birth_day: " +d;
-                is_valid_dob = dobCheck(birth_year, birth_month, birth_day);
+                is_valid_dob = inputCheck.dobCheck(birth_year, birth_month, birth_day);
                 if(is_valid_dob == false){
                     valid_dob.setText(getResources().getString(R.string.invalid_dob));
                     valid_dob.setTextColor(Color.parseColor("#D8000C"));
-                    button_submit.setEnabled(false);
                 }
                 if(is_valid_dob == true){
                     valid_dob.setText(getResources().getString(R.string.valid_dob));
                     valid_dob.setTextColor(Color.parseColor("#4F8A10"));
-                    button_submit.setEnabled(true);
+                    setButtonSubmitEnabled();
                 }
             }
         };
@@ -101,37 +98,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dpd.show();
         }
         if(v.getId() == R.id.button_submit){
-            String input_name_string = input_name.getText().toString();
-            String input_email_string = input_email.getText().toString();
-            String input_username_string = input_username.getText().toString();
             //Create intent to go to submit activity class
             Intent submitActivity = new Intent(MainActivity.this, SubmitActivity.class);
             //Add the name to the intent
-            submitActivity.putExtra(input_username_string_var, input_username_string);
+            submitActivity.putExtra("input_username", input_username.getText().toString());
             startActivity(submitActivity);
         }
     }
-    public boolean dobCheck(int birth_year, int birth_month, int birth_day){
-        Calendar c = Calendar.getInstance();
-        int current_year = c.get(Calendar.YEAR);
-        int current_month = c.get(Calendar.MONTH);
-        int current_day = c.get(Calendar.DAY_OF_MONTH);
-        int min_year = current_year -18;
-        int min_month = current_month;
-        //The person is years younger than min year
-        if(birth_year > min_year){
-            return false;
-        }
-        //The person is same years as min year but they were born in an later month
-        if((birth_year == min_year) && (birth_month > min_month)){
-            return false;
-        }
-        //The person is same years and months as min but they were born on a later day
-        if((birth_year == min_year) && (birth_month == min_month) && (birth_day > current_day)){
-            return false;
-        }
-        else {
-            return true;
+    public void setButtonSubmitEnabled(){
+        if(is_valid_name == true && is_valid_email == true && is_valid_username == true && is_valid_dob == true){
+            button_submit.setEnabled(true);
         }
     }
     @Override
@@ -174,5 +150,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         birth_month = 0;
         birth_day = 1;
         valid_dob.setText("");
+    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+    @Override
+    public void afterTextChanged(Editable s) {
+        String input_name_string = input_name.getText().toString();
+        String input_email_string = input_email.getText().toString();
+        String input_username_string = input_username.getText().toString();
+        String is_valid_name = 
     }
 }
