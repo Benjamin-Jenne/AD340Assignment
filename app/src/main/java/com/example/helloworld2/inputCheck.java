@@ -1,5 +1,6 @@
 package com.example.helloworld2;
 
+import android.util.Patterns;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -46,17 +47,14 @@ public class inputCheck {
         }
         return "valid";
     }
-    public static String emailCheck(String email){
+    public static boolean emailCheck(String email){
+        //Referenced https://stackoverflow.com/questions/1819142/how-should-i-validate-an-e-mail-address
         if(email.equals("")){
-            return "empty";
+            return false;
         }
-        char[] c = email.toCharArray();
-        for(int i = 0; i<c.length; i++){
-            if(Character.isLetter(c[i]) == false && Character.isDigit(c[i]) == false) {
-                return "invalid_char";
-            }
+        else{
+            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
         }
-        return "valid";
     }
     public static String userNameCheck(String username){
         if(username.equals("")){

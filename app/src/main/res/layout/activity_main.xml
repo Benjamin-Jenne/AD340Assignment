@@ -19,8 +19,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/input_name"
-        android:hint="Name"
+        android:id="@+id/input_firstname"
+        android:hint="First Name"
         android:padding="10dp"
         android:inputType="textPersonName"
         android:background="@drawable/border" />
@@ -29,7 +29,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:id="@+id/valid_name"/>
+        android:id="@+id/valid_firstname"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_lastname"
+        android:hint="Last Name"
+        android:padding="10dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/valid_lastname"/>
 
     <EditText
         android:layout_width="match_parent"

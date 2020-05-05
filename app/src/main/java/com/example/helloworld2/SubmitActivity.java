@@ -14,7 +14,7 @@ public class SubmitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_submit);
         Intent SubmitActivity = getIntent();
         //Get the name from main activity
-        String input_username_string = SubmitActivity.getStringExtra(MainActivity.input_username_string_var);
+        String input_username_string = SubmitActivity.getStringExtra("input_username");
         //Get the TextView object from the xml class
         TextView submit_message = (TextView) findViewById(R.id.submit_message);
         //Send our name to the TextView object to display on the screen
