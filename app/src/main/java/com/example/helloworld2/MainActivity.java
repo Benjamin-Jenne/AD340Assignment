@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(inputCheck.dobCheck(birth_year, birth_month, birth_day) == false){
                     valid_dob.setText(getResources().getString(R.string.invalid_dob));
                     valid_dob.setTextColor(Color.parseColor("#D8000C"));
+                    button_submit.setEnabled(false);
                 }
                 if(inputCheck.dobCheck(birth_year, birth_month, birth_day) == true){
                     valid_dob.setText(getResources().getString(R.string.valid_dob));

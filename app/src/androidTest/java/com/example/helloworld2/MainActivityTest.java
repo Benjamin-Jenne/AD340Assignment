@@ -11,15 +11,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
+
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -85,5 +91,36 @@ public class MainActivityTest {
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2002, 5, 5));
         onView(withText("OK")).perform(click());
         onView(withId(R.id.valid_dob)).check(matches(withText("\u2713 18 years or older")));
+    }
+    @Test
+    public void submitButtonDisabledBadInput(){
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input_firstname)).perform(typeText("Ben"));
+        onView(withId(R.id.input_firstname)).perform(clearText());
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input_lastname)).perform(typeText("Jenne"));
+        onView(withId(R.id.input_lastname)).perform(clearText());
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
+        onView(withId(R.id.input_email)).perform(clearText());
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input_username)).perform(typeText("ben10"));
+        onView(withId(R.id.input_username)).perform(clearText());
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.button_dob)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2008, 4, 4));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+    }
+    @Test
+    public void submitButtonValidInput(){
+        onView(withId(R.id.input_firstname)).perform(typeText("Ben"));
+        onView(withId(R.id.input_lastname)).perform(typeText("Ben"));
+        onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
+        onView(withId(R.id.input_username)).perform(typeText("ben10"));
+        onView(withId(R.id.button_dob)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.button_submit)).perform(click());
     }
 }
