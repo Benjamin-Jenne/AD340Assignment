@@ -8,7 +8,7 @@
     <string name="previous">Previous</string>
     <string name="hello_world">Hello!</string>
     <string name="author">Created by Benjamin Jenne on 4/24/2020</string>
-    <string name="thanks">Thanks for Signing Up &#160;</string>
+    <string name="thanks">Thanks for Signing Up</string>
     <string name="exclamation">!</string>
     <string name="valid_dob">\u2713 18 years or older</string>
     <string name="invalid_dob">✗ Must be 18 years or older</string>

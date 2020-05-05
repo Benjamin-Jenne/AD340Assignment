@@ -1,5 +1,6 @@
 package com.example.helloworld2;
 
+import android.util.Log;
 import android.widget.DatePicker;
 
 import androidx.test.espresso.contrib.PickerActions;
@@ -11,7 +12,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
+import java.util.Calendar;
+import java.util.Date;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
@@ -69,14 +71,47 @@ public class MainActivityTest {
         onView(withId(R.id.valid_username)).check(matches(withText("Please enter your username")));
     }
     @Test
+    public void badNameInput(){
+        onView(withId(R.id.input_firstname)).perform(typeText("Ben134"));
+        onView(withId(R.id.valid_firstname)).check(matches(withText("Please only enter letters")));
+        onView(withId(R.id.input_lastname)).perform(typeText("Jenne134"));
+        onView(withId(R.id.valid_lastname)).check(matches(withText("Please only enter letters")));
+    }
+    @Test
+    public void badEmailInput(){
+        onView(withId(R.id.input_email)).perform(typeText("Ben"));
+        onView(withId(R.id.input_email)).perform(clearText());
+        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
+        onView(withId(R.id.input_email)).perform(typeText("ben.ben@ben"));
+        onView(withId(R.id.input_email)).perform(clearText());
+        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
+        onView(withId(R.id.input_email)).perform(typeText("a@.com"));
+        onView(withId(R.id.input_email)).perform(clearText());
+        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
+    }
+    @Test
     public void testDatePickerTooYoung(){
         //Referenced https://stackoverflow.com/questions/43149728/select-date-from-calendar-in-android-espresso
+        //Born years too early
+        Calendar c = Calendar.getInstance();
+        int currentDay = c.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = c.get(Calendar.MONTH) + 1;
+        int currentYear = c.get(Calendar.YEAR);
+        Log.i("currentDay: ", Integer.toString(currentDay));
+        Log.i("currentMonth: ", Integer.toString(currentMonth));
+        Log.i("currentYear: ", Integer.toString(currentYear));
         onView(withId(R.id.button_dob)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2008, 4, 4));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(currentYear - 10, 1, 1));
         onView(withText("OK")).perform(click());
         onView(withId(R.id.valid_dob)).check(matches(withText("✗ Must be 18 years or older")));
+        //Born months too early
         onView(withId(R.id.button_dob)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2002, 5, 6));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(currentYear-18, currentMonth + 3, 1));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.valid_dob)).check(matches(withText("✗ Must be 18 years or older")));
+        //Born days too early
+        onView(withId(R.id.button_dob)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(currentYear-18, currentMonth, currentDay + 3));
         onView(withText("OK")).perform(click());
         onView(withId(R.id.valid_dob)).check(matches(withText("✗ Must be 18 years or older")));
     }
@@ -122,5 +157,6 @@ public class MainActivityTest {
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
         onView(withText("OK")).perform(click());
         onView(withId(R.id.button_submit)).perform(click());
+        onView(withId(R.id.submit_message)).check(matches(withText("Thanks for Signing Up ben10!")));
     }
 }
