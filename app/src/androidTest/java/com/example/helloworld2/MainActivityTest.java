@@ -47,7 +47,7 @@ public class MainActivityTest {
     @Test
     public void testTextInput(){
         onView(withId(R.id.input_firstname))
-                .perform(typeText("Ben")).check(matches(withText("Ben")));
+                .perform(typeText("Benjamin")).check(matches(withText("Benjamin")));
         onView(withId(R.id.input_lastname))
                 .perform(typeText("Jenne")).check(matches(withText("Jenne")));
         onView(withId(R.id.input_email))
