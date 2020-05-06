@@ -1,18 +1,16 @@
 <resources>
     <string name="app_name">HelloWorld2</string>
     <string name="action_settings">Settings</string>
+    <string name="hello_world">Tell us about yourself.</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="hello_world">Hello!</string>
     <string name="author">Created by Benjamin Jenne on 4/24/2020</string>
-    <string name="thanks">Thanks for Signing Up</string>
-    <string name="exclamation">!</string>
     <string name="valid_dob">\u2713 18 years or older</string>
     <string name="invalid_dob">✗ Must be 18 years or older</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="enter_username">Please enter your username</string>
+    <string name="letters_or_numbers">Please only enter letters or numbers</string>
+    <string name="letters">Please only enter letters</string>
+    <string name="enter_email">Please enter a valid email</string>
+    <string name="enter_firstname">Please enter your first name</string>
+    <string name="enter_lastname">Please enter your last name</string>
+    <string name="enter_description">Please enter your description</string>
 </resources>

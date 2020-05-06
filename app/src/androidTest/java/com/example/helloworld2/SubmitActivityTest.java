@@ -20,9 +20,9 @@ public class SubmitActivityTest {
         @Override
         protected Intent getActivityIntent() {
             Intent i = new Intent();
-            i.putExtra("input_firstname", "Ben");
-            i.putExtra("input_occupation", "Welder");
-            i.putExtra("input_description", "I like cooking and reading.");
+            i.putExtra(Constants.INPUT_FIRSTNAME, Constants.TEST_FIRST_NAME);
+            i.putExtra(Constants.INPUT_OCCUPATION, "Welder");
+            i.putExtra(Constants.INPUT_DESCRIPTION, "I like cooking and reading.");
             return i;
         }
     };

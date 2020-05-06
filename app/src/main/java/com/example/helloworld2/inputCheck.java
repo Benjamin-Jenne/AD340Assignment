@@ -52,15 +52,15 @@ public class inputCheck {
     public static String nameCheck(String name){
         //Referenced https://stackoverflow.com/questions/5238491/check-if-string-contains-only-letters
         if(name.equals("")){
-            return "empty";
+            return Constants.EMPTY;
         }
         char[] c = name.toCharArray();
         for(int i = 0; i<c.length; i++){
             if(Character.isLetter(c[i]) == false){
-                return "non_letter";
+                return Constants.NON_LETTER;
             }
         }
-        return "valid";
+        return Constants.VALID;
     }
     public static boolean emailCheck(String email){
         //Referenced https://stackoverflow.com/questions/1819142/how-should-i-validate-an-e-mail-address
@@ -73,34 +73,34 @@ public class inputCheck {
     }
     public static String userNameCheck(String username){
         if(username.equals("")){
-            return"empty";
+            return Constants.EMPTY;
         }
         else{
-            return"valid";
+            return Constants.VALID;
         }
     }
     public static String occupationCheck(String occupation){
         if(occupation.equals("")){
-            return "empty";
+            return Constants.EMPTY;
         }
         char[] c = occupation.toCharArray();
         for(int i = 0; i<c.length; i++){
             if(Character.isLetter(c[i]) == false && Character.isWhitespace(c[i]) == false){
-                return "non_letter";
+                return Constants.NON_LETTER;
             }
         }
-        return "valid";
+        return Constants.VALID;
     }
     public static String descriptionCheck(String description){
         if(description.equals("")){
-            return "empty";
+            return Constants.EMPTY;
         }
         char[] c = description.toCharArray();
         for(int i = 0; i<c.length; i++){
             if(Character.isLetter(c[i]) == false && Character.isWhitespace(c[i]) == false && Character.isDigit(c[i]) == false){
-                return "non_letter";
+                return Constants.NON_LETTER;
             }
         }
-        return "valid";
+        return Constants.VALID;
     }
 }

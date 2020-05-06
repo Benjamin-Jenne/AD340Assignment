@@ -46,58 +46,58 @@ public class MainActivityTest {
     @Test
     public void testTextInput(){
         onView(withId(R.id.input_firstname))
-                .perform(typeText("Benjamin")).check(matches(withText("Benjamin")));
+                .perform(typeText(Constants.TEST_FIRST_NAME)).check(matches(withText(Constants.TEST_FIRST_NAME)));
         onView(withId(R.id.input_lastname))
-                .perform(typeText("Jenne")).check(matches(withText("Jenne")));
+                .perform(typeText(Constants.TEST_LAST_NAME)).check(matches(withText(Constants.TEST_LAST_NAME)));
         onView(withId(R.id.input_email))
-                .perform(typeText("jenne.ben.e@gmail.com")).check(matches(withText("jenne.ben.e@gmail.com")));
+                .perform(typeText(Constants.TEST_EMAIL)).check(matches(withText(Constants.TEST_EMAIL)));
         onView(withId(R.id.input_username))
-                .perform(typeText("Ben10")).check(matches(withText("Ben10")));
+                .perform(typeText(Constants.TEST_USERNAME)).check(matches(withText(Constants.TEST_USERNAME)));
     }
     @Test
     public void emptyTextWarning(){
-        onView(withId(R.id.input_firstname)).perform(typeText("Ben"));
+        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
         onView(withId(R.id.input_firstname)).perform(clearText());
-        onView(withId(R.id.valid_firstname)).check(matches(withText("Please enter your first name")));
-        onView(withId(R.id.input_lastname)).perform(typeText("Ben"));
+        onView(withId(R.id.valid_firstname)).check(matches(withText(R.string.enter_firstname)));
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_FIRST_NAME));
         onView(withId(R.id.input_lastname)).perform(clearText());
-        onView(withId(R.id.valid_lastname)).check(matches(withText("Please enter your last name")));
-        onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
+        onView(withId(R.id.valid_lastname)).check(matches(withText(R.string.enter_lastname)));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_EMAIL));
         onView(withId(R.id.input_email)).perform(clearText());
-        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
-        onView(withId(R.id.input_username)).perform(typeText("ben10"));
+        onView(withId(R.id.valid_email)).check(matches(withText(R.string.enter_email)));
+        onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
         onView(withId(R.id.input_username)).perform(clearText());
-        onView(withId(R.id.valid_username)).check(matches(withText("Please enter your username")));
+        onView(withId(R.id.valid_username)).check(matches(withText(R.string.enter_username)));
     }
     @Test
     public void badNameInput(){
-        onView(withId(R.id.input_firstname)).perform(typeText("Ben134"));
-        onView(withId(R.id.valid_firstname)).check(matches(withText("Please only enter letters")));
-        onView(withId(R.id.input_lastname)).perform(typeText("Jenne134"));
-        onView(withId(R.id.valid_lastname)).check(matches(withText("Please only enter letters")));
+        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_BAD_NAME));
+        onView(withId(R.id.valid_firstname)).check(matches(withText(R.string.letters)));
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_BAD_NAME));
+        onView(withId(R.id.valid_lastname)).check(matches(withText(R.string.letters)));
     }
     @Test
     public void badEmailInput(){
-        onView(withId(R.id.input_email)).perform(typeText("Ben"));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_FIRST_NAME));
         onView(withId(R.id.input_email)).perform(clearText());
-        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
-        onView(withId(R.id.input_email)).perform(typeText("ben.ben@ben"));
+        onView(withId(R.id.valid_email)).check(matches(withText(R.string.enter_email)));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_BAD_EMAIL_1));
         onView(withId(R.id.input_email)).perform(clearText());
-        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
-        onView(withId(R.id.input_email)).perform(typeText("a@.com"));
+        onView(withId(R.id.valid_email)).check(matches(withText(R.string.enter_email)));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_BAD_EMAIL_2));
         onView(withId(R.id.input_email)).perform(clearText());
-        onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
+        onView(withId(R.id.valid_email)).check(matches(withText(R.string.enter_email)));
         Espresso.closeSoftKeyboard();
     }
     @Test
     public void badOccupationInput(){
-        onView(withId(R.id.input_occupation)).perform(typeText("1234counter"));
-        onView(withId(R.id.valid_occupation)).check(matches(withText("Please only enter letters")));
+        onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_BAD_OCCUPATION));
+        onView(withId(R.id.valid_occupation)).check(matches(withText(R.string.letters)));
     }
     @Test
     public void badDescriptionInput(){
-        onView(withId(R.id.input_description)).perform(typeText("I like !counting% ^to 53"));
-        onView(withId(R.id.valid_description)).check(matches(withText("Please only enter letters or numbers")));
+        onView(withId(R.id.input_description)).perform(typeText(Constants.TEST_BAD_DESCRIPTION));
+        onView(withId(R.id.valid_description)).check(matches(withText(R.string.letters_or_numbers)));
     }
     @Test
     public void testDatePickerTooYoung(){
@@ -107,80 +107,77 @@ public class MainActivityTest {
         int currentDay = c.get(Calendar.DAY_OF_MONTH);
         int currentMonth = c.get(Calendar.MONTH) + 1;
         int currentYear = c.get(Calendar.YEAR);
-        Log.i("currentDay: ", Integer.toString(currentDay));
-        Log.i("currentMonth: ", Integer.toString(currentMonth));
-        Log.i("currentYear: ", Integer.toString(currentYear));
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(currentYear - 10, 1, 1));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.valid_dob)).check(matches(withText("✗ Must be 18 years or older")));
+        onView(withText(Constants.OK)).perform(click());
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.invalid_dob)));
         //Born months too early
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(currentYear-18, currentMonth + 3, 1));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.valid_dob)).check(matches(withText("✗ Must be 18 years or older")));
+        onView(withText(Constants.OK)).perform(click());
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.invalid_dob)));
         //Born days too early
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(currentYear-18, currentMonth, currentDay + 3));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.valid_dob)).check(matches(withText("✗ Must be 18 years or older")));
+        onView(withText(Constants.OK)).perform(click());
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.invalid_dob)));
     }
     @Test
     public void testDatePickerOldEnough(){
         //Referenced https://stackoverflow.com/questions/43149728/select-date-from-calendar-in-android-espresso
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.valid_dob)).check(matches(withText("\u2713 18 years or older")));
+        onView(withText(Constants.OK)).perform(click());
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.valid_dob)));
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2002, 5, 5));
-        onView(withText("OK")).perform(click());
-        onView(withId(R.id.valid_dob)).check(matches(withText("\u2713 18 years or older")));
+        onView(withText(Constants.OK)).perform(click());
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.valid_dob)));
     }
     @Test
     public void submitButtonDisabledBadInput(){
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
-        onView(withId(R.id.input_firstname)).perform(typeText("Ben"));
+        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
         onView(withId(R.id.input_firstname)).perform(clearText());
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
-        onView(withId(R.id.input_lastname)).perform(typeText("Jenne"));
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_LAST_NAME));
         onView(withId(R.id.input_lastname)).perform(clearText());
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
-        onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_EMAIL));
         onView(withId(R.id.input_email)).perform(clearText());
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
-        onView(withId(R.id.input_username)).perform(typeText("ben10"));
+        onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
         onView(withId(R.id.input_username)).perform(clearText());
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
-        onView(withId(R.id.input_occupation)).perform(typeText("Software dev"));
+        onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_OCCUPATION));
         onView(withId(R.id.input_occupation)).perform(clearText());
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
-        onView(withId(R.id.input_description)).perform(typeText("I like cooking and reading 12 books in a row"));
+        onView(withId(R.id.input_description)).perform(typeText(Constants.TEST_OCCUPATION));
         onView(withId(R.id.input_description)).perform(clearText());
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2008, 4, 4));
-        onView(withText("OK")).perform(click());
+        onView(withText(Constants.OK)).perform(click());
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
     }
     @Test
     public void submitButtonValidInput(){
-        onView(withId(R.id.input_firstname)).perform(typeText("Ben"));
-        onView(withId(R.id.input_lastname)).perform(typeText("Ben"));
-        onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
-        onView(withId(R.id.input_username)).perform(typeText("ben10"));
-        onView(withId(R.id.input_occupation)).perform(typeText("welder"));
-        onView(withId(R.id.input_description)).perform(typeText("I like cooking and reading."));
+        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_FIRST_NAME));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_EMAIL));
+        onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
+        onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_OCCUPATION));
+        onView(withId(R.id.input_description)).perform(typeText(Constants.TEST_DESCRIPTION));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
-        onView(withText("OK")).perform(click());
+        onView(withText(Constants.OK)).perform(click());
         onView(withId(R.id.button_submit)).perform(click());
     }
 }

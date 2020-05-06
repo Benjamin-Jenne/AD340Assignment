@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView valid_occupation;
     private TextView valid_description;
 
-    public int birth_year = 2000;
-    public int birth_month = 0;
-    public int birth_day = 1;
+    public int birth_year;
+    public int birth_month;
+    public int birth_day;
 
     DatePickerDialog.OnDateSetListener date_listener;
 
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         input_occupation.addTextChangedListener((TextWatcher) this);
         input_description.addTextChangedListener((TextWatcher) this);
 
+        Calendar c = Calendar.getInstance();
+        birth_year = c.get(Calendar.YEAR);
+        birth_month = c.get(Calendar.MONTH);
+        birth_day = c.get(Calendar.DAY_OF_MONTH);
+
         button_submit.setEnabled(false);
 
         date_listener = new DatePickerDialog.OnDateSetListener() {
@@ -90,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 birth_day = selected_birth_day;
                 if (inputCheck.dobCheck(birth_year, birth_month, birth_day) == false) {
                     valid_dob.setText(getResources().getString(R.string.invalid_dob));
-                    valid_dob.setTextColor(Color.parseColor("#D8000C"));
+                    valid_dob.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
                     button_submit.setEnabled(false);
                 }
                 if (inputCheck.dobCheck(birth_year, birth_month, birth_day) == true) {
                     valid_dob.setText(getResources().getString(R.string.valid_dob));
-                    valid_dob.setTextColor(Color.parseColor("#4F8A10"));
+                    valid_dob.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSuccess, null));
                     setButtonSubmitEnabled();
                 }
             }
@@ -112,22 +119,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Create intent to go to submit activity class
             Intent submitActivity = new Intent(MainActivity.this, SubmitActivity.class);
             //Add the name to the intent
-            submitActivity.putExtra("input_firstname", input_firstname.getText().toString());
-            submitActivity.putExtra("input_occupation", input_occupation.getText().toString());
-            submitActivity.putExtra("input_description", input_description.getText().toString());
+            submitActivity.putExtra(Constants.INPUT_FIRSTNAME, input_firstname.getText().toString());
+            submitActivity.putExtra(Constants.INPUT_OCCUPATION, input_occupation.getText().toString());
+            submitActivity.putExtra(Constants.INPUT_DESCRIPTION, input_description.getText().toString());
             submitActivity.putExtra("age", Integer.toString(inputCheck.getAge(birth_year,birth_month,birth_day)));
             startActivity(submitActivity);
         }
     }
 
     public void setButtonSubmitEnabled() {
-        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals("valid") &&
-                inputCheck.nameCheck(input_lastname.getText().toString()).equals("valid") &&
+        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals(Constants.VALID) &&
+                inputCheck.nameCheck(input_lastname.getText().toString()).equals(Constants.VALID) &&
                 inputCheck.emailCheck(input_email.getText().toString()) == true &&
-                inputCheck.userNameCheck(input_username.getText().toString()).equals("valid") &&
+                inputCheck.userNameCheck(input_username.getText().toString()).equals(Constants.VALID) &&
                 inputCheck.dobCheck(birth_year, birth_month, birth_day) == true &&
-                inputCheck.occupationCheck(input_occupation.getText().toString()).equals("valid") &&
-                inputCheck.descriptionCheck(input_description.getText().toString()).equals("valid")) {
+                inputCheck.occupationCheck(input_occupation.getText().toString()).equals(Constants.VALID) &&
+                inputCheck.descriptionCheck(input_description.getText().toString()).equals(Constants.VALID)) {
             button_submit.setEnabled(true);
         }
     }
@@ -135,21 +142,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState.containsKey("birth_year") &&
-                savedInstanceState.containsKey("birth_month") &&
-                savedInstanceState.containsKey("birth_day")) {
-            birth_year = savedInstanceState.getInt("birth_year");
-            birth_month = savedInstanceState.getInt("birth_month");
-            birth_day = savedInstanceState.getInt("birth_day");
+        if (savedInstanceState.containsKey(Constants.BIRTH_YEAR) &&
+                savedInstanceState.containsKey(Constants.BIRTH_MONTH) &&
+                savedInstanceState.containsKey(Constants.BIRTH_DAY)) {
+            birth_year = savedInstanceState.getInt(Constants.BIRTH_YEAR);
+            birth_month = savedInstanceState.getInt(Constants.BIRTH_MONTH);
+            birth_day = savedInstanceState.getInt(Constants.BIRTH_DAY);
         }
         if (inputCheck.dobCheck(birth_year, birth_month, birth_day) == false) {
             valid_dob.setText(getResources().getString(R.string.invalid_dob));
-            valid_dob.setTextColor(Color.parseColor("#D8000C"));
+            valid_dob.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
         if (inputCheck.dobCheck(birth_year, birth_month, birth_day) == true) {
             valid_dob.setText(getResources().getString(R.string.valid_dob));
-            valid_dob.setTextColor(Color.parseColor("#4F8A10"));
+            valid_dob.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorSuccess, null));
             setButtonSubmitEnabled();
         }
     }
@@ -157,15 +164,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("birth_year", birth_year);
-        outState.putInt("birth_month", birth_month);
-        outState.putInt("birth_day", birth_day);
+        outState.putInt(Constants.BIRTH_YEAR, birth_year);
+        outState.putInt(Constants.BIRTH_MONTH, birth_month);
+        outState.putInt(Constants.BIRTH_DAY, birth_day);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i("Main Activity: ", "onRestart()");
         input_firstname.getText().clear();
         input_lastname.getText().clear();
         input_email.getText().clear();
@@ -194,32 +200,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals("valid")) {
+        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals(Constants.VALID)) {
             valid_firstname.setText("");
             setButtonSubmitEnabled();
         }
-        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals("empty")) {
-            valid_firstname.setText("Please enter your first name");
-            valid_firstname.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals(Constants.EMPTY)) {
+            valid_firstname.setText(getResources().getString(R.string.enter_firstname));
+            valid_firstname.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals("non_letter")) {
-            valid_firstname.setText("Please only enter letters");
-            valid_firstname.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.nameCheck(input_firstname.getText().toString()).equals(Constants.NON_LETTER)) {
+            valid_firstname.setText(getResources().getString(R.string.letters));
+            valid_firstname.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             setButtonSubmitEnabled();
         }
-        if (inputCheck.nameCheck(input_lastname.getText().toString()).equals("valid")) {
+        if (inputCheck.nameCheck(input_lastname.getText().toString()).equals(Constants.VALID)) {
             valid_lastname.setText("");
             setButtonSubmitEnabled();
         }
-        if (inputCheck.nameCheck(input_lastname.getText().toString()).equals("empty")) {
-            valid_lastname.setText("Please enter your last name");
-            valid_lastname.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.nameCheck(input_lastname.getText().toString()).equals(Constants.EMPTY)) {
+            valid_lastname.setText(getResources().getString(R.string.enter_lastname));
+            valid_lastname.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.nameCheck(input_lastname.getText().toString()).equals("non_letter")) {
-            valid_lastname.setText("Please only enter letters");
-            valid_lastname.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.nameCheck(input_lastname.getText().toString()).equals(Constants.NON_LETTER)) {
+            valid_lastname.setText(getResources().getString(R.string.letters));
+            valid_lastname.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
         if (inputCheck.emailCheck(input_email.getText().toString()) == true) {
@@ -227,45 +233,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setButtonSubmitEnabled();
         }
         if (inputCheck.emailCheck(input_email.getText().toString()) == false) {
-            valid_email.setText("Please enter a valid email");
-            valid_email.setTextColor(Color.parseColor("#D8000C"));
+            valid_email.setText(getResources().getString(R.string.enter_email));
+            valid_email.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.userNameCheck(input_username.getText().toString()).equals("valid")) {
+        if (inputCheck.userNameCheck(input_username.getText().toString()).equals(Constants.VALID)) {
             valid_username.setText("");
             setButtonSubmitEnabled();
         }
-        if (inputCheck.userNameCheck(input_username.getText().toString()).equals("empty")) {
-            valid_username.setText("Please enter your username");
-            valid_username.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.userNameCheck(input_username.getText().toString()).equals(Constants.EMPTY)) {
+            valid_username.setText(getResources().getString(R.string.enter_username));
+            valid_username.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.occupationCheck(input_occupation.getText().toString()).equals("valid")) {
+        if (inputCheck.occupationCheck(input_occupation.getText().toString()).equals(Constants.VALID)) {
             valid_occupation.setText("");
             setButtonSubmitEnabled();
         }
-        if (inputCheck.occupationCheck(input_occupation.getText().toString()).equals("non_letter")) {
-            valid_occupation.setText("Please only enter letters");
-            valid_occupation.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.occupationCheck(input_occupation.getText().toString()).equals(Constants.NON_LETTER)) {
+            valid_occupation.setText(getResources().getString(R.string.letters));
+            valid_occupation.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.occupationCheck(input_occupation.getText().toString()).equals("empty")) {
-            valid_occupation.setText("Please enter your username");
-            valid_occupation.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.occupationCheck(input_occupation.getText().toString()).equals(Constants.EMPTY)) {
+            valid_occupation.setText(getResources().getString(R.string.enter_username));
+            valid_occupation.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.descriptionCheck(input_description.getText().toString()).equals("valid")) {
+        if (inputCheck.descriptionCheck(input_description.getText().toString()).equals(Constants.VALID)) {
             valid_description.setText("");
             setButtonSubmitEnabled();
         }
-        if (inputCheck.descriptionCheck(input_description.getText().toString()).equals("non_letter")) {
-            valid_description.setText("Please only enter letters or numbers");
-            valid_description.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.descriptionCheck(input_description.getText().toString()).equals(Constants.NON_LETTER)) {
+            valid_description.setText(getResources().getString(R.string.letters_or_numbers));
+            valid_description.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
-        if (inputCheck.descriptionCheck(input_description.getText().toString()).equals("empty")) {
-            valid_description.setText("Please enter your username");
-            valid_description.setTextColor(Color.parseColor("#D8000C"));
+        if (inputCheck.descriptionCheck(input_description.getText().toString()).equals(Constants.EMPTY)) {
+            valid_description.setText(getResources().getString(R.string.enter_description));
+            valid_description.setTextColor(ResourcesCompat.getColor(getResources(), R.color.colorFailure, null));
             button_submit.setEnabled(false);
         }
     }
