@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class SubmitActivity extends AppCompatActivity {
@@ -13,12 +14,10 @@ public class SubmitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
         Intent SubmitActivity = getIntent();
-        //Get the name from main activity
-        String input_username_string = SubmitActivity.getStringExtra("input_username");
-        //Get the TextView object from the xml class
-        TextView submit_message = (TextView) findViewById(R.id.submit_message);
-        //Send our name to the TextView object to display on the screen
-        String final_submit_message = getString(R.string.thanks) + " " + input_username_string + getString(R.string.exclamation);
-        submit_message.setText(final_submit_message);
+        String nameAgeString = SubmitActivity.getStringExtra("input_firstname") + SubmitActivity.getStringExtra("age");
+        //Log.i("nameAgeString", nameAgeString);
+        TextView nameAge = (TextView) findViewById(R.id.nameAge);
+        //nameAge.setText(SubmitActivity.getStringExtra(nameAgeString));
+        nameAge.setText(nameAgeString);
     }
 }

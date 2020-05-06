@@ -3,6 +3,7 @@ package com.example.helloworld2;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -13,9 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Calendar;
-import java.util.Date;
 
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -88,6 +87,17 @@ public class MainActivityTest {
         onView(withId(R.id.input_email)).perform(typeText("a@.com"));
         onView(withId(R.id.input_email)).perform(clearText());
         onView(withId(R.id.valid_email)).check(matches(withText("Please enter a valid email")));
+        Espresso.closeSoftKeyboard();
+    }
+    @Test
+    public void badOccupationInput(){
+        onView(withId(R.id.input_occupation)).perform(typeText("1234counter"));
+        onView(withId(R.id.valid_occupation)).check(matches(withText("Please only enter letters")));
+    }
+    @Test
+    public void badDescriptionInput(){
+        onView(withId(R.id.input_description)).perform(typeText("I like !counting% ^to 53"));
+        onView(withId(R.id.valid_description)).check(matches(withText("Please only enter letters or numbers")));
     }
     @Test
     public void testDatePickerTooYoung(){
@@ -132,15 +142,27 @@ public class MainActivityTest {
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
         onView(withId(R.id.input_firstname)).perform(typeText("Ben"));
         onView(withId(R.id.input_firstname)).perform(clearText());
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
         onView(withId(R.id.input_lastname)).perform(typeText("Jenne"));
         onView(withId(R.id.input_lastname)).perform(clearText());
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
         onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
         onView(withId(R.id.input_email)).perform(clearText());
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
         onView(withId(R.id.input_username)).perform(typeText("ben10"));
         onView(withId(R.id.input_username)).perform(clearText());
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input_occupation)).perform(typeText("Software dev"));
+        onView(withId(R.id.input_occupation)).perform(clearText());
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input_description)).perform(typeText("I like cooking and reading 12 books in a row"));
+        onView(withId(R.id.input_description)).perform(clearText());
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_submit)).check(matches(not(isEnabled())));
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2008, 4, 4));
@@ -153,10 +175,12 @@ public class MainActivityTest {
         onView(withId(R.id.input_lastname)).perform(typeText("Ben"));
         onView(withId(R.id.input_email)).perform(typeText("jenne.ben.e@gmail.com"));
         onView(withId(R.id.input_username)).perform(typeText("ben10"));
+        onView(withId(R.id.input_occupation)).perform(typeText("welder"));
+        onView(withId(R.id.input_description)).perform(typeText("I like cooking and reading."));
+        Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_dob)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
         onView(withText("OK")).perform(click());
         onView(withId(R.id.button_submit)).perform(click());
-        onView(withId(R.id.submit_message)).check(matches(withText("Thanks for Signing Up ben10!")));
     }
 }

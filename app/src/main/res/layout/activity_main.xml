@@ -78,6 +78,38 @@
         android:text=""
         android:id="@+id/valid_username"/>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_occupation"
+        android:hint="Occupation"
+        android:padding= "10dp"
+        android:inputType="textPersonName"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/valid_occupation"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_description"
+        android:hint="Description"
+        android:padding= "10dp"
+        android:inputType="textPersonName"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/valid_description"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

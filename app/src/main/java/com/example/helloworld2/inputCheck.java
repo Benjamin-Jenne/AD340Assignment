@@ -10,7 +10,22 @@ public class inputCheck {
     private TextView valid_email;
     private TextView valid_username;
     private TextView valid_dob;
-
+    public static int getAge(int birth_year, int birth_month, int birth_day){
+        Calendar c = Calendar.getInstance();
+        int current_year = c.get(Calendar.YEAR);
+        int current_month = c.get(Calendar.MONTH);
+        int current_day = c.get(Calendar.DAY_OF_MONTH);
+        int yearsOld = current_year - birth_year;
+        if(birth_month > current_month){
+            return yearsOld -1;
+        }
+        if(birth_month == current_month && birth_day > current_day){
+            return yearsOld -1;
+        }
+        else{
+            return yearsOld;
+        }
+    }
     public static boolean dobCheck(int birth_year, int birth_month, int birth_day){
         Calendar c = Calendar.getInstance();
         int current_year = c.get(Calendar.YEAR);
@@ -63,5 +78,29 @@ public class inputCheck {
         else{
             return"valid";
         }
+    }
+    public static String occupationCheck(String occupation){
+        if(occupation.equals("")){
+            return "empty";
+        }
+        char[] c = occupation.toCharArray();
+        for(int i = 0; i<c.length; i++){
+            if(Character.isLetter(c[i]) == false && Character.isWhitespace(c[i]) == false){
+                return "non_letter";
+            }
+        }
+        return "valid";
+    }
+    public static String descriptionCheck(String description){
+        if(description.equals("")){
+            return "empty";
+        }
+        char[] c = description.toCharArray();
+        for(int i = 0; i<c.length; i++){
+            if(Character.isLetter(c[i]) == false && Character.isWhitespace(c[i]) == false && Character.isDigit(c[i]) == false){
+                return "non_letter";
+            }
+        }
+        return "valid";
     }
 }
