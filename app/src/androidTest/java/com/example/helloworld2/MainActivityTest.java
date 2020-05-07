@@ -1,5 +1,6 @@
 package com.example.helloworld2;
 
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.widget.DatePicker;
 
@@ -7,6 +8,7 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import org.hamcrest.Matchers;
 import org.junit.Rule;
@@ -31,8 +33,8 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
     @Rule
-    public ActivityScenarioRule<MainActivity> activityScenarioRule
-            = new ActivityScenarioRule<MainActivity>(MainActivity.class);
+    public ActivityTestRule<MainActivity> activityTestRule
+            = new ActivityTestRule<>(MainActivity.class);
     @Test
     public void hasTextOnScreen(){
         onView(withId(R.id.hello_world))
@@ -169,7 +171,7 @@ public class MainActivityTest {
     @Test
     public void submitButtonValidInput(){
         onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
-        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_FIRST_NAME));
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_LAST_NAME));
         onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_EMAIL));
         onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
         onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_OCCUPATION));
@@ -179,5 +181,70 @@ public class MainActivityTest {
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
         onView(withText(Constants.OK)).perform(click());
         onView(withId(R.id.button_submit)).perform(click());
+        onView(withId(R.id.nameAge)).check(matches(withText(Constants.TEST_FIRST_NAME + ", " + Constants.TEST_AGE)));
+    }
+    @Test
+    public void RotateState(){
+        //Referenced https://stackoverflow.com/questions/37362200/how-to-rotate-activity-i-mean-screen-orientation-change-using-espresso
+
+        //Enter some good input in portrait mode
+        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_LAST_NAME));
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_EMAIL));
+        onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
+        onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_OCCUPATION));
+        onView(withId(R.id.input_description)).perform(typeText(Constants.TEST_DESCRIPTION));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.button_dob)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1994, 4, 4));
+        onView(withText(Constants.OK)).perform(click());
+
+        //Rotate the screen into landscape and check the state.
+        activityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        onView(withId(R.id.input_firstname)).check(matches(withText(Constants.TEST_FIRST_NAME)));
+        onView(withId(R.id.valid_firstname)).check(matches(withText("")));
+        onView(withId(R.id.input_lastname)).check(matches(withText(Constants.TEST_LAST_NAME)));
+        onView(withId(R.id.valid_lastname)).check(matches(withText("")));
+        onView(withId(R.id.input_email)).check(matches(withText(Constants.TEST_EMAIL)));
+        onView(withId(R.id.valid_email)).check(matches(withText("")));
+        onView(withId(R.id.input_username)).check(matches(withText(Constants.TEST_USERNAME)));
+        onView(withId(R.id.valid_username)).check(matches(withText("")));
+        onView(withId(R.id.input_occupation)).check(matches(withText(Constants.TEST_OCCUPATION)));
+        onView(withId(R.id.valid_occupation)).check(matches(withText("")));
+        onView(withId(R.id.input_description)).check(matches(withText(Constants.TEST_DESCRIPTION)));
+        onView(withId(R.id.valid_description)).check(matches(withText("")));
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.valid_dob)));
+
+        //Clear Text
+        onView(withId(R.id.input_firstname)).perform(clearText());
+        onView(withId(R.id.input_lastname)).perform(clearText());
+        onView(withId(R.id.input_email)).perform(clearText());
+        onView(withId(R.id.input_username)).perform(clearText());
+        onView(withId(R.id.input_occupation)).perform(clearText());
+        onView(withId(R.id.input_description)).perform(clearText());
+
+        //Enter some bad info in landscape
+        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_BAD_NAME));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_BAD_NAME));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_BAD_EMAIL_1));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_BAD_OCCUPATION));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.input_description)).perform(typeText(Constants.TEST_BAD_DESCRIPTION));
+        Espresso.closeSoftKeyboard();
+
+        //Rotate the screen into landscape and check the state.
+        activityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        onView(withId(R.id.valid_firstname)).check(matches(withText(R.string.letters)));
+        onView(withId(R.id.valid_lastname)).check(matches(withText(R.string.letters)));
+        onView(withId(R.id.valid_email)).check(matches(withText(R.string.enter_email)));
+        onView(withId(R.id.valid_username)).check(matches(withText("")));
+        onView(withId(R.id.valid_occupation)).check(matches(withText(R.string.letters)));
+        onView(withId(R.id.valid_description)).check(matches(withText(R.string.letters_or_numbers)));
+        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.valid_dob)));
     }
 }

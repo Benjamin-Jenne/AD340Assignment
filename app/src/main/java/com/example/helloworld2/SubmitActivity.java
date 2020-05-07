@@ -14,7 +14,7 @@ public class SubmitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
         Intent SubmitActivity = getIntent();
-        String nameAgeString = SubmitActivity.getStringExtra(Constants.INPUT_FIRSTNAME) + SubmitActivity.getStringExtra("age");
+        String nameAgeString = SubmitActivity.getStringExtra(Constants.INPUT_FIRSTNAME) + ", " + SubmitActivity.getStringExtra(Constants.AGE);
         //Log.i("nameAgeString", nameAgeString);
         TextView nameAge = (TextView) findViewById(R.id.nameAge);
         //nameAge.setText(SubmitActivity.getStringExtra(nameAgeString));

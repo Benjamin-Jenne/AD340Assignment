@@ -21,9 +21,15 @@ public class SubmitActivityTest {
         protected Intent getActivityIntent() {
             Intent i = new Intent();
             i.putExtra(Constants.INPUT_FIRSTNAME, Constants.TEST_FIRST_NAME);
-            i.putExtra(Constants.INPUT_OCCUPATION, "Welder");
-            i.putExtra(Constants.INPUT_DESCRIPTION, "I like cooking and reading.");
+            i.putExtra(Constants.INPUT_OCCUPATION, Constants.TEST_OCCUPATION);
+            i.putExtra(Constants.INPUT_DESCRIPTION, Constants.TEST_DESCRIPTION);
+            i.putExtra(Constants.AGE, Constants.TEST_AGE);
             return i;
         }
     };
+    @Test
+    public void testTitle() {
+        onView(withId(R.id.nameAge))
+                .check(matches(withText(Constants.TEST_FIRST_NAME + ", " + Constants.TEST_AGE)));
+    }
 }

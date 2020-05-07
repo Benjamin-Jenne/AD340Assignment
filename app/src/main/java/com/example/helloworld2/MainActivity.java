@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             submitActivity.putExtra(Constants.INPUT_FIRSTNAME, input_firstname.getText().toString());
             submitActivity.putExtra(Constants.INPUT_OCCUPATION, input_occupation.getText().toString());
             submitActivity.putExtra(Constants.INPUT_DESCRIPTION, input_description.getText().toString());
-            submitActivity.putExtra("age", Integer.toString(inputCheck.getAge(birth_year,birth_month,birth_day)));
+            submitActivity.putExtra(Constants.AGE, Integer.toString(inputCheck.getAge(birth_year,birth_month,birth_day)));
             startActivity(submitActivity);
         }
     }

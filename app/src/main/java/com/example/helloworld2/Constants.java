@@ -20,6 +20,8 @@ public class Constants {
     static final String TEST_EMAIL = "jenne.ben.e@gmail.com";
     static final String TEST_OCCUPATION = "Welder";
     static final String TEST_USERNAME = "Ben10";
-    static final String TEST_DESCRIPTION = "I like cooking and reading.";
+    static final String TEST_DESCRIPTION = "I like cooking and reading";
     static final String OK = "OK";
+    static final String AGE = "age";
+    static final String TEST_AGE = "26";
 }
