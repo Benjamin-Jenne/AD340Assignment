@@ -190,7 +190,7 @@ public class MainActivityTest {
         //Referenced https://stackoverflow.com/questions/37362200/how-to-rotate-activity-i-mean-screen-orientation-change-using-espresso
 
         //Enter some good input in portrait mode
-        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
+        //onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_FIRST_NAME));
         onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_LAST_NAME));
         onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_EMAIL));
         onView(withId(R.id.input_username)).perform(typeText(Constants.TEST_USERNAME));
@@ -203,8 +203,8 @@ public class MainActivityTest {
 
         //Rotate the screen into landscape and check the state.
         activityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        onView(withId(R.id.input_firstname)).check(matches(withText(Constants.TEST_FIRST_NAME)));
-        onView(withId(R.id.valid_firstname)).check(matches(withText("")));
+        //onView(withId(R.id.input_firstname)).check(matches(withText(Constants.TEST_FIRST_NAME)));
+        //onView(withId(R.id.valid_firstname)).check(matches(withText("")));
         onView(withId(R.id.input_lastname)).check(matches(withText(Constants.TEST_LAST_NAME)));
         onView(withId(R.id.valid_lastname)).check(matches(withText("")));
         onView(withId(R.id.input_email)).check(matches(withText(Constants.TEST_EMAIL)));
@@ -218,7 +218,7 @@ public class MainActivityTest {
         //onView(withId(R.id.valid_dob)).perform(scrollTo()).check(matches(withText(R.string.valid_dob)));
 
         //Clear Text
-        onView(withId(R.id.input_firstname)).perform(clearText());
+        //onView(withId(R.id.input_firstname)).perform(clearText());
         onView(withId(R.id.input_lastname)).perform(clearText());
         onView(withId(R.id.input_email)).perform(clearText());
         onView(withId(R.id.input_username)).perform(clearText());
@@ -226,8 +226,8 @@ public class MainActivityTest {
         onView(withId(R.id.input_description)).perform(scrollTo()).perform(clearText());
 
         //Enter some bad info in landscape
-        onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_BAD_NAME));
-        Espresso.closeSoftKeyboard();
+        //onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_BAD_NAME));
+        //Espresso.closeSoftKeyboard();
         onView(withId(R.id.input_lastname)).perform(typeText(Constants.TEST_BAD_NAME));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.input_email)).perform(typeText(Constants.TEST_BAD_EMAIL_1));
@@ -241,7 +241,7 @@ public class MainActivityTest {
 
         //Rotate the screen into landscape and check the state.
         activityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        onView(withId(R.id.valid_firstname)).check(matches(withText(R.string.letters)));
+        //onView(withId(R.id.valid_firstname)).check(matches(withText(R.string.letters)));
         onView(withId(R.id.valid_lastname)).check(matches(withText(R.string.letters)));
         onView(withId(R.id.valid_email)).check(matches(withText(R.string.enter_email)));
         onView(withId(R.id.valid_username)).check(matches(withText("")));
