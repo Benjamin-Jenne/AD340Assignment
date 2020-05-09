@@ -11,7 +11,7 @@
     tools:context=".SubmitActivity">
 
     <ImageView
-        android:id="@+id/nero_image"
+        android:id="@+id/profile_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/nero"/>
@@ -20,5 +20,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/nameAge" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/occupation" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/description" />
+
 
 </LinearLayout>

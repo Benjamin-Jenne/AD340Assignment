@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.DatePicker;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -211,9 +212,9 @@ public class MainActivityTest {
         onView(withId(R.id.valid_username)).check(matches(withText("")));
         onView(withId(R.id.input_occupation)).check(matches(withText(Constants.TEST_OCCUPATION)));
         onView(withId(R.id.valid_occupation)).check(matches(withText("")));
-        onView(withId(R.id.input_description)).check(matches(withText(Constants.TEST_DESCRIPTION)));
-        onView(withId(R.id.valid_description)).check(matches(withText("")));
-        onView(withId(R.id.valid_dob)).check(matches(withText(R.string.valid_dob)));
+        onView(withId(R.id.input_description)).perform(ViewActions.scrollTo()).check(matches(withText(Constants.TEST_DESCRIPTION)));
+        onView(withId(R.id.valid_description)).perform(ViewActions.scrollTo()).check(matches(withText("")));
+        onView(withId(R.id.valid_dob)).perform(ViewActions.scrollTo()).check(matches(withText(R.string.valid_dob)));
 
         //Clear Text
         onView(withId(R.id.input_firstname)).perform(clearText());
@@ -221,7 +222,7 @@ public class MainActivityTest {
         onView(withId(R.id.input_email)).perform(clearText());
         onView(withId(R.id.input_username)).perform(clearText());
         onView(withId(R.id.input_occupation)).perform(clearText());
-        onView(withId(R.id.input_description)).perform(clearText());
+        onView(withId(R.id.input_description)).perform(ViewActions.scrollTo()).perform(clearText());
 
         //Enter some bad info in landscape
         onView(withId(R.id.input_firstname)).perform(typeText(Constants.TEST_BAD_NAME));
@@ -234,7 +235,7 @@ public class MainActivityTest {
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.input_occupation)).perform(typeText(Constants.TEST_BAD_OCCUPATION));
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.input_description)).perform(typeText(Constants.TEST_BAD_DESCRIPTION));
+        onView(withId(R.id.input_description)).perform(ViewActions.scrollTo()).perform(typeText(Constants.TEST_BAD_DESCRIPTION));
         Espresso.closeSoftKeyboard();
 
         //Rotate the screen into landscape and check the state.
