@@ -27,7 +27,7 @@ public class SubmitActivity extends AppCompatActivity {
 
         String nameAgeString = SubmitActivity.getStringExtra(Constants.INPUT_FIRSTNAME) + ", " + SubmitActivity.getStringExtra(Constants.AGE);
         nameAge.setText(nameAgeString);
-        occupation.setText(Constants.INPUT_OCCUPATION);
-        description.setText(Constants.INPUT_DESCRIPTION);
+        occupation.setText(SubmitActivity.getStringExtra(Constants.INPUT_OCCUPATION));
+        description.setText(SubmitActivity.getStringExtra(Constants.INPUT_DESCRIPTION));
     }
 }

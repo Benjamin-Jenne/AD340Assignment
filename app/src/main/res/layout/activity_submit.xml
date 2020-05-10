@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="10dp"
     android:background="@android:color/white"
+    android:orientation="vertical"
+
     tools:context=".SubmitActivity">
 
     <ImageView
         android:id="@+id/profile_image"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center"
+        android:src="@drawable/nero" />
+
+    <TextView
+        android:id="@+id/nameAge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/nero"/>
+        android:layout_gravity="center"
+        android:textSize="50dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/nameAge" />
+        android:layout_gravity="center"
+        android:id="@+id/occupation"
+        android:textSize="40dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/occupation" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/description" />
+        android:layout_gravity="center"
+        android:id="@+id/description"
+        android:paddingTop="40dp"
+        android:textSize="30dp"/>
 
 
 </LinearLayout>
