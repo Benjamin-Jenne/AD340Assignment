@@ -29,6 +29,11 @@ public class SubmitActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Update String Instance Variables
+        nameAge = getIntent().getStringExtra(Constants.INPUT_FIRSTNAME) + ", " + getIntent().getStringExtra(Constants.AGE);
+        occupation = getIntent().getStringExtra(Constants.INPUT_OCCUPATION);
+        description = getIntent().getStringExtra(Constants.INPUT_DESCRIPTION);
+
         //Layout
         setContentView(R.layout.activity_submit);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -38,22 +43,32 @@ public class SubmitActivity extends AppCompatActivity {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        //Update String Instance Variables
-        nameAge = getIntent().getStringExtra(Constants.INPUT_FIRSTNAME) + ", " + getIntent().getStringExtra(Constants.AGE);
-        occupation = getIntent().getStringExtra(Constants.INPUT_OCCUPATION);
-        description = getIntent().getStringExtra(Constants.INPUT_DESCRIPTION);
-
         manager = getSupportFragmentManager();
     }
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
+        //Create new profileFragment
+        ProfileFragment profileFragment= new ProfileFragment();
+        Operation operation = new Operation(nameAge, occupation, description);
+        profileFragment.setOperation(operation);
+
+        //Add fragments to adapter
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile));
-        adapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile));
-        adapter.addFragment(new ProfileFragment(), getResources().getString(R.string.profile));
+        adapter.addFragment(profileFragment, getResources().getString(R.string.profile));
+        adapter.addFragment(new MatchesFragment(), getResources().getString(R.string.matches));
+        adapter.addFragment(new SettingsFragment(), getResources().getString(R.string.settings));
         viewPager.setAdapter(adapter);
     }
-    public void sendDataToFragment(View view){
+    public class Operation {
+        public String nameAge;
+        public String occupation;
+        public String description;
+
+        public Operation(String nameAge, String occupation, String description) {
+            this.nameAge = nameAge;
+            this.occupation = occupation;
+            this.description = description;
+        }
     }
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();

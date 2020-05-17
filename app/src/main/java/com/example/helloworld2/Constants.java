@@ -24,4 +24,5 @@ public class Constants {
     static final String OK = "OK";
     static final String AGE = "age";
     static final String TEST_AGE = "26";
+    static final String NAME_AGE = "nameAge";
 }

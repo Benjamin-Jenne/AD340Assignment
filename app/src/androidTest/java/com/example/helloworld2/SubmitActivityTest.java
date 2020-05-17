@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -53,5 +54,19 @@ public class SubmitActivityTest {
         activityTestRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         onView(withId(R.id.nameAge))
                 .check(matches(withText(Constants.TEST_FIRST_NAME + ", " + Constants.TEST_AGE)));
+        onView(withId(R.id.occupation))
+                .check(matches(withText(Constants.TEST_OCCUPATION)));
+        onView(withId(R.id.description))
+                .check(matches(withText(Constants.TEST_DESCRIPTION)));
+    }
+    @Test
+    public void testMatchesTab(){
+        onView(withText("MATCHES")).perform(click());
+        onView(withId(R.id.matches_placeholder)).check(matches(withText(R.string.matches)));
+    }
+    @Test
+    public void testSettingsTab(){
+        onView(withText("SETTINGS")).perform(click());
+        onView(withId(R.id.settings_placeholder)).check(matches(withText(R.string.settings)));
     }
 }
