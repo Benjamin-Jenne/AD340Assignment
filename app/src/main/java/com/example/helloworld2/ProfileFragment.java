@@ -96,5 +96,4 @@ public class ProfileFragment extends Fragment{
         super.onDestroy();
         Log.d(TAG, "onDestroy() called");
     }
-
 }

@@ -16,4 +16,8 @@
     <string name="profile">profile</string>
     <string name="matches">matches</string>
     <string name="settings">settings</string>
+    <string name="example_match_name">Germanicus Julius Caesar</string>
+    <string name="example_match_description">Roman General</string>
+    <string name="like">Like</string>
+    <string name="you_liked">You liked</string>
 </resources>
