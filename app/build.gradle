@@ -25,13 +25,18 @@ android {
             testCoverageEnabled true
         }
     }
-
+    compileOptions {
+        targetCompatibility 1.8;
+        sourceCompatibility 1.8;
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
@@ -46,6 +51,15 @@ dependencies {
     //Navigation
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+
+    //Volley
+    implementation 'com.android.volley:volley:1.1.1'
 
     //Testing
     testImplementation 'junit:junit:4.12'

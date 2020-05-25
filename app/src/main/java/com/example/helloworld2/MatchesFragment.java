@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,9 +24,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class MatchesFragment extends Fragment{
     private TextView matchesPlaceholder;
     private Context fragmentContext;
+    private FirebaseViewModel vm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -34,6 +39,33 @@ public class MatchesFragment extends Fragment{
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        vm = new FirebaseViewModel();
+
+        newTodoItemText = findViewById(R.id.newTodoItemText);
+
+        vm.getMatches(
+                (ArrayList<Match> matches) -> {
+                    FragmentManager manager = getSupportFragmentManager();
+                    TodoItemFragment fragment = (TodoItemFragment) manager.findFragmentByTag("todoItemFragment");
+
+                    if (fragment != null) {
+                        // Remove fragment to re-add it
+                        FragmentTransaction transaction = manager.beginTransaction();
+                        transaction.remove(fragment);
+                        transaction.commit();
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(ARG_DATA_SET, todoItems);
+
+                    TodoItemFragment todoItemFragment = new TodoItemFragment();
+                    todoItemFragment.setArguments(bundle);
+
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.add(R.id.todoItemListFragmentContainer, todoItemFragment, "todoItemFragment");
+                    transaction.commit();
+                });
         return recyclerView;
     }
     //Referenced
