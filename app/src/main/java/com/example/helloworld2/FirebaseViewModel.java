@@ -14,25 +14,25 @@ public class FirebaseViewModel {
         firebaseModel = new FirebaseModel();
     }
 
-    public void addTodoItem(Match m) {
-        firebaseModel.addTodoItem(m);
+    public void addMatch(Match m) {
+        firebaseModel.addMatch(m);
     }
 
     public void getMatches(Consumer<ArrayList<Match>> responseCallback) {
         firebaseModel.getMatches(
                 (QuerySnapshot querySnapshot) -> {
                     if (querySnapshot != null) {
-                        ArrayList<Match> todoItems = new ArrayList<>();
+                        ArrayList<Match> matches = new ArrayList<>();
                         for (DocumentSnapshot todoSnapshot : querySnapshot.getDocuments()) {
                             Match m = todoSnapshot.toObject(Match.class);
                             assert m != null;
                             m.uid = todoSnapshot.getId();
-                            todoItems.add(m);
+                            matches.add(m);
                         }
-                        responseCallback.accept(todoItems);
+                        responseCallback.accept(matches);
                     }
                 },
-                (databaseError -> System.out.println("Error reading Todo Items: " + databaseError))
+                (databaseError -> System.out.println("Error reading Matches: " + databaseError))
         );
     }
 

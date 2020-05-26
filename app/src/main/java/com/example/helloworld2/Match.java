@@ -11,22 +11,36 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Match implements Parcelable {
+    public String name;
+    public String imageUrl;
     public String uid;
-    public String title;
-    public boolean done;
+    public boolean liked;
 
     public Match() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
-
-    public Match(String title, boolean done) {
-        this.title = title;
-        this.done = done;
+    public String getName(){
+        return name;
+    }
+    public String getImageUrl(){
+        return imageUrl;
+    }
+    public boolean getLiked(){
+        return liked;
+    }
+    public void setName(String n){
+        name = n;
+    }
+    public void setImageUrl(String i){
+        imageUrl = i;
+    }
+    public void setLiked(boolean l){
+        liked = l;
     }
 
     public Match(Parcel in) {
-        title = in.readString();
-        done = in.readByte() != 0;
+        name = in.readString();
+        liked = in.readByte() != 0;
     }
 
     public static final Creator<Match> CREATOR = new Creator<Match>() {
@@ -45,8 +59,8 @@ public class Match implements Parcelable {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
-        result.put("title", title);
-        result.put("done", done);
+        result.put("name", name);
+        result.put("liked", liked);
 
         return result;
     }
@@ -58,7 +72,7 @@ public class Match implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeByte((byte) (done ? 1 : 0));
+        dest.writeString(name);
+        dest.writeByte((byte) (liked ? 1 : 0));
     }
 }

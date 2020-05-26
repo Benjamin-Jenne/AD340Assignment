@@ -3,6 +3,7 @@ package com.example.helloworld2;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.RequestQueue;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class MatchesFragment extends Fragment{
@@ -42,43 +48,17 @@ public class MatchesFragment extends Fragment{
 
         vm = new FirebaseViewModel();
 
-        newTodoItemText = findViewById(R.id.newTodoItemText);
-
-        vm.getMatches(
-                (ArrayList<Match> matches) -> {
-                    FragmentManager manager = getSupportFragmentManager();
-                    TodoItemFragment fragment = (TodoItemFragment) manager.findFragmentByTag("todoItemFragment");
-
-                    if (fragment != null) {
-                        // Remove fragment to re-add it
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        transaction.remove(fragment);
-                        transaction.commit();
-                    }
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(ARG_DATA_SET, todoItems);
-
-                    TodoItemFragment todoItemFragment = new TodoItemFragment();
-                    todoItemFragment.setArguments(bundle);
-
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.add(R.id.todoItemListFragmentContainer, todoItemFragment, "todoItemFragment");
-                    transaction.commit();
-                });
         return recyclerView;
     }
     //Referenced
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView picture;
         public TextView name;
-        public TextView description;
         public Button like_button;
         public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.fragment_matches, parent, false));
             picture = (ImageView) itemView.findViewById(R.id.card_image);
             name = (TextView) itemView.findViewById(R.id.card_title);
-            description = (TextView) itemView.findViewById(R.id.card_text);
             like_button = (Button) itemView.findViewById(R.id.like_button);
             like_button.setOnClickListener((View.OnClickListener) this);
         }
@@ -97,19 +77,23 @@ public class MatchesFragment extends Fragment{
     public static class ContentAdapter extends RecyclerView.Adapter<ViewHolder> {
         // Set numbers of List in RecyclerView.
         private static final int LENGTH = 6;
-        private final String[] mPlaces;
-        private final String[] mPlaceDesc;
-        private final Drawable[] mPlacePictures;
+        private final String[] names;
+        private final String[] pictures;
+        private FirebaseViewModel vm;
+        private RequestQueue queue;
+
         public ContentAdapter(Context context) {
-            Resources resources = context.getResources();
-            mPlaces = resources.getStringArray(R.array.places);
-            mPlaceDesc = resources.getStringArray(R.array.place_desc);
-            TypedArray a = resources.obtainTypedArray(R.array.places_picture);
-            mPlacePictures = new Drawable[a.length()];
-            for (int i = 0; i < mPlacePictures.length; i++) {
-                mPlacePictures[i] = a.getDrawable(i);
-            }
-            a.recycle();
+            names = new String[6];
+            pictures = new String[6];
+            vm = new FirebaseViewModel();
+            vm.getMatches(
+                    (ArrayList<Match> matches) -> {
+                        for(int i = 0; i < matches.size(); i++){
+                            names[i] = matches.get(i).getName();
+                            pictures[i] = matches.get(i).getImageUrl();
+                        }
+                        notifyDataSetChanged();
+                    });
         }
 
         @Override
@@ -119,9 +103,8 @@ public class MatchesFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.picture.setImageDrawable(mPlacePictures[position % mPlacePictures.length]);
-            holder.name.setText(mPlaces[position % mPlaces.length]);
-            holder.description.setText(mPlaceDesc[position % mPlaceDesc.length]);
+            Picasso.get().load(pictures[position % pictures.length]).into(holder.picture);
+            holder.name.setText(names[position % names.length]);
         }
 
         @Override

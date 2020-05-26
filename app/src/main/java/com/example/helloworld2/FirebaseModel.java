@@ -23,13 +23,13 @@ public class FirebaseModel {
         listeners = new ArrayList<>();
     }
 
-    public void addTodoItem(Match m) {
-        CollectionReference todoItemsRef = db.collection("todoItems");
-        todoItemsRef.add(Match);
+    public void addMatch(Match m) {
+        CollectionReference todoItemsRef = db.collection("matches");
+        todoItemsRef.add(m);
     }
 
     public void getMatches(Consumer<QuerySnapshot> dataChangedCallback, Consumer<FirebaseFirestoreException> dataErrorCallback) {
-        ListenerRegistration listener = db.collection("todoItems")
+        ListenerRegistration listener = db.collection("matches")
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
                         dataErrorCallback.accept(e);
@@ -41,10 +41,9 @@ public class FirebaseModel {
     }
 
     public void updateMatchById(Match m) {
-        DocumentReference todoItemRef = db.collection("todoItems").document(m.uid);
+        DocumentReference todoItemRef = db.collection("matches").document(m.uid);
         Map<String, Object> data = new HashMap<>();
-        data.put("title", m.title);
-        data.put("done", m.done);
+        data.put("liked", m.liked);
         todoItemRef.update(data);
     }
 
