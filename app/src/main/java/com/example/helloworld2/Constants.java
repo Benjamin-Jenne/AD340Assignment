@@ -25,4 +25,7 @@ public class Constants {
     static final String AGE = "age";
     static final String TEST_AGE = "26";
     static final String NAME_AGE = "nameAge";
+    static final String REMINDER_HOUR = "reminder_hour";
+    static final String REMINDER_MINUTE = "reminder_minute;";
+    static final String SET_REMINDER = "set_reminder";
 }

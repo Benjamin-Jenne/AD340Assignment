@@ -20,7 +20,21 @@
     <string name="example_match_description">Roman General</string>
     <string name="like">Like</string>
     <string name="you_liked">You liked</string>
-    <string name="desired_min_age">Desired Minimum Age</string>
-    <string name="desired_max_age">Desired Maximum Age</string>
-    <string name="desired_range">Desired Distance (Miles)</string>
+    <string name="min_age">Minimum Age</string>
+    <string name="max_age">Maximum Age</string>
+    <string name="range">Distance (Miles)</string>
+    <string name="account_privacy">Account Privacy</string>
+    <string name="your_min_age">I am interested in people as young as </string>
+    <string name="your_max_age">I am interested in people as old as </string>
+    <string name="your_range">I am interested in people within </string>
+    <string name="miles">miles</string>
+    <string name="your_acount_is">Your account is currently set to </string>
+    <string name="is_public">public</string>
+    <string name="is_private">private</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="reminder_off">Your daily matches reminder is currently off</string>
+    <string name="reminder_on">You will be reminded about your matches at </string>
+    <string name="remind_me">Notify me about new matches at </string>
+    <string name="pm">pm</string>
+    <string name="am">am</string>
 </resources>
