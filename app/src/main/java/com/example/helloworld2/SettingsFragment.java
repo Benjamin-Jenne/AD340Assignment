@@ -1,6 +1,8 @@
 package com.example.helloworld2;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.firestore.auth.User;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.Observer;
 
 public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener, Switch.OnCheckedChangeListener{
     //Textviews
@@ -51,6 +59,9 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
 
     //View model
     private SettingsViewModel settingsViewModel;
+    private Settings settings;
+
+    //
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -102,13 +113,17 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         AccountPrivacySwitch.setOnCheckedChangeListener((Switch.OnCheckedChangeListener) this);
         DailyReminderSwitch.setOnCheckedChangeListener((Switch.OnCheckedChangeListener) this);
 
+        //Create new Settings instance and a View Model for Room Persistence
+        settings = new Settings();
+        settings.id = 0;
+        settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+
         //Time Picker
         time_listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hours, int minutes) {
                 reminder_hour = hours;
                 reminder_minute = minutes;
-                set_reminder = true;
                 if(reminder_hour <= 12){
                     if(reminder_minute<10){
                         setDailyReminderText.setText(getResources().getString(R.string.reminder_on) + " " + Integer.toString(reminder_hour) + ":" + "0" + Integer.toString(reminder_minute) + "am");
@@ -125,21 +140,33 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
                         setDailyReminderText.setText(getResources().getString(R.string.reminder_on) + " " + Integer.toString(reminder_hour - 12) + ":" + Integer.toString(reminder_minute) + "pm");
                     }
                 }
+                settings.setReminderHour(reminder_hour);
+                settings.setReminderHour(reminder_minute);
+                applySettings();
             }
         };
     }
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
         if (seekBar.getId() == R.id.Min_Age_Bar) {
-            String min_age = Integer.toString(progress + 18);
-            setMinAgeText.setText(getResources().getString(R.string.your_min_age) + " " + min_age);
+            int min_age = progress + 18;
+            String min_age_string = Integer.toString(min_age);
+            setMinAgeText.setText(getResources().getString(R.string.your_min_age) + " " + min_age_string);
+            settings.setMinAge(min_age);
         }
         if (seekBar.getId() == R.id.Max_Age_Bar) {
-            setMaxAgeText.setText(getResources().getString(R.string.your_max_age) + " " + Integer.toString(progress + 18));
+            int max_age = progress + 18;
+            String max_age_string = Integer.toString(max_age);
+            setMaxAgeText.setText(getResources().getString(R.string.your_max_age) + " " + max_age_string);
+            settings.setMaxAge(max_age);
         }
         if (seekBar.getId() == R.id.Range_Bar) {
-            setRangeText.setText(getResources().getString(R.string.your_range)+ " " + Integer.toString(progress + 1) + " " + getResources().getString(R.string.miles));
+            int range = progress + 18;
+            String range_string = Integer.toString(range);
+            setRangeText.setText(getResources().getString(R.string.your_range)+ " " + range_string + " " + getResources().getString(R.string.miles));
+            settings.setMinAge(range);
         }
+        applySettings();
     }
     @Override
     public void onStartTrackingTouch(SeekBar seekBar){
@@ -154,43 +181,30 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         if(buttonView.getId() == R.id.Account_Privacy_Switch){
             if(isChecked == true){
                 setPublicText.setText(getResources().getString(R.string.your_acount_is) + " " + getResources().getString(R.string.is_private));
+                settings.setIsPrivate(true);
             }
             else{
                 setPublicText.setText(getResources().getString(R.string.your_acount_is) + " " + getResources().getString(R.string.is_public));
+                settings.setIsPrivate(false);
             }
         }
         if(buttonView.getId() == R.id.Daily_Reminder_Switch){
             if(isChecked == true){
-                if(set_reminder == false){
-                    TimePickerDialog tpd = new TimePickerDialog(getContext(), time_listener, reminder_hour, reminder_minute, false);
-                    tpd.show();
-                }
-                if(set_reminder == true){
-                    if(reminder_hour <= 12){
-                        if(reminder_minute<10){
-                            setDailyReminderText.setText(getResources().getString(R.string.reminder_on) + " " + Integer.toString(reminder_hour) + ":" + "0" + Integer.toString(reminder_minute) + "am");
-                        }
-                        else{
-                            setDailyReminderText.setText(getResources().getString(R.string.reminder_on) + " " + Integer.toString(reminder_hour) + ":" + Integer.toString(reminder_minute) + "am");
-                        }
-                    }
-                    if(reminder_hour > 12){
-                        if(reminder_minute<10){
-                            setDailyReminderText.setText(getResources().getString(R.string.reminder_on) + " " + Integer.toString(reminder_hour - 12) + ":" + "0" + Integer.toString(reminder_minute) + "pm");
-                        }
-                        else{
-                            setDailyReminderText.setText(getResources().getString(R.string.reminder_on) + " " + Integer.toString(reminder_hour - 12) + ":" + Integer.toString(reminder_minute) + "pm");
-                        }
-                    }
-                }
+                TimePickerDialog tpd = new TimePickerDialog(getContext(), time_listener, reminder_hour, reminder_minute, false);
+                tpd.show();
+                settings.setDailyReminder(true);
             }
-            if(isChecked == false){
+            else{ //isChecked == false
                 setDailyReminderText.setText(getResources().getString(R.string.reminder_off));
                 set_reminder = false;
                 reminder_minute = 1;
                 reminder_hour = 1;
+                settings.setDailyReminder(false);
+                settings.setReminderHour(1);
+                settings.setReminderMinutes(1);
             }
         }
+        applySettings();
     }
     @Override
     public void onActivityCreated(@NonNull Bundle savedInstanceState) {
@@ -212,4 +226,8 @@ public class SettingsFragment extends Fragment implements SeekBar.OnSeekBarChang
         outState.putInt(Constants.REMINDER_MINUTE, reminder_minute);
         outState.putBoolean(Constants.SET_REMINDER, set_reminder);
     }
+    public void applySettings(){
+        settingsViewModel.insert(getContext(), settings);
+    }
 }
+

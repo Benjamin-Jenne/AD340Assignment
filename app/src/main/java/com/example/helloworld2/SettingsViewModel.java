@@ -6,12 +6,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 public class SettingsViewModel extends ViewModel {
-    public LiveData<Settings> getSettings(Context context){
+    public LiveData<Settings> getSettingsById(Context context, int id){
         AppDatabase db = AppDatabaseSingleton.getDatabase(context);
-        return db.settingsDao().getSettings();
+        return db.settingsDao().getSettingsById(id);
     }
     public void insert(Context context, Settings settings){
         AppDatabase db = AppDatabaseSingleton.getDatabase(context);
-        return db.settingsDao().insert(settings);
+        db.getTransactionExecutor().execute(() -> {
+            db.settingsDao().insert(settings);
+        });
     }
 }

@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Settings {
     @PrimaryKey
+    public int id;
     @NonNull
     private int minAge = 18;
 
@@ -28,6 +29,8 @@ public class Settings {
 
     @ColumnInfo
     private int reminderMinutes = 1;
+
+    public Settings(){};
 
     public int getMinAge() { return minAge; }
 
@@ -56,6 +59,5 @@ public class Settings {
     public void setReminderHour(int rh) { this.reminderHour = rh; }
 
     public void setReminderMinutes(int rm) { this.reminderMinutes = rm; }
-
 
 }

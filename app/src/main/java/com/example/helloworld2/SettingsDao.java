@@ -14,9 +14,9 @@ import java.util.List;
 
 @Dao
 public interface SettingsDao {
-    @Query("SELECT * FROM settings")
-    LiveData<Settings> getSettings();
+    @Query("SELECT * FROM settings where id = :id")
+    LiveData<Settings> getSettingsById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Settings settings);
+    void insert(Settings s);
 }
