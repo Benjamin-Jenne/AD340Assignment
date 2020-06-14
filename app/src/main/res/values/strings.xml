@@ -37,4 +37,13 @@
     <string name="remind_me">Notify me about new matches at </string>
     <string name="pm">pm</string>
     <string name="am">am</string>
+    <string name="enable_location">Enable Location</string>
+    <string name="location_message">Your Locations Settings is set to \'Off\'. Please Enable Location to use this app</string>
+    <string name="location_settings">Location Settings</string>
+    <string name="location_cancel">Cancel</string>
+    <string name="network_provider_started_running">GPS started running</string>
+    <string name="network_provider_update">GPS location updated</string>
+    <string name="Location_Services_Disabled">Location Services Disabled</string>
+    <string name="Enable_Location">Please enable location in settings.</string>
+    <string name="OK">OK</string>
 </resources>

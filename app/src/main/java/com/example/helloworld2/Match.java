@@ -13,6 +13,8 @@ import java.util.Map;
 public class Match implements Parcelable {
     public String name;
     public String imageUrl;
+    public String lat;
+    public String longitude;
     public String uid;
     public boolean liked;
 
@@ -25,6 +27,8 @@ public class Match implements Parcelable {
     public String getImageUrl(){
         return imageUrl;
     }
+    public String getLat() { return lat; }
+    public String getLongitude() { return longitude; }
     public boolean getLiked(){
         return liked;
     }
